@@ -1,20 +1,28 @@
 import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import ReactDOM from 'react-dom';
+import {Component} from 'react';
+import TodoList from './TodoList'
+import EditTodo from './EditTodo';
+import AddTodo from './AddTodo';
 
-function App() {
+function App()
+{
     return (
-        <div className="container">
-            <div className="row justify-content-center">
-                <div className="col-md-8">
-                    <div className="card">
-                        <div className="card-header">Todo Application</div>
-
-                        <div className="card-body">Nothing to see here yet!</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+        <Router className="App__container">
+            <Switch>
+                <Route exact path="/">
+                    <TodoList />
+                </Route>
+                <Route path="/add-todo">
+                    <AddTodo />
+                </Route>
+                <Route path="/edit-todo">
+                    <EditTodo />
+                </Route>
+            </Switch>
+        </Router>
+    )
 }
 
 export default App;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TodoController extends Controller
 {
@@ -14,7 +15,7 @@ class TodoController extends Controller
      */
     public function index()
     {
-        return response(Todo::all(), 200);
+        return response()->json(Todo::all(), 200);
     }
 
     /**
@@ -25,7 +26,20 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'title' => 'Required|String',
+                'description' => 'Required|String',
+                'completed' => 'boolean'
+            ]
+        );
+
+        if($validator->fails()) {
+            return response($validator->getMessageBag(), 400);
+        }
+
+        return response()->json(Todo::create($request->all()), 201);
     }
 
     /**
@@ -35,9 +49,13 @@ class TodoController extends Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Todo $todo)
+    public function completedtoggle(Request $request, Todo $todo)
     {
-        //
+        $todo->update([
+            'completed' => !$todo->completed
+        ]);
+
+        return response()->json(200);
     }
 
     /**
@@ -46,8 +64,10 @@ class TodoController extends Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Todo $todo)
+    public function delete(Todo $todo)
     {
-        //
+        $todo->delete();
+
+        return response()->json(204);
     }
 }
