@@ -26,20 +26,15 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'title' => 'Required|String',
-                'description' => 'Required|String',
-                'completed' => 'boolean'
-            ]
-        );
+        info($request->all());
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            // 'completed' => 'boolean'
+        ]);
+        $todo = Todo::create($request->all());
 
-        if($validator->fails()) {
-            return response($validator->getMessageBag(), 400);
-        }
-
-        return response()->json(Todo::create($request->all()), 201);
+        return response()->json($todo);
     }
 
     /**
@@ -58,6 +53,18 @@ class TodoController extends Controller
         return response()->json(200);
     }
 
+    public function update(Request $request, Todo $todo)
+    {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'completed' => 'boolean'
+        ]);
+        $todo->update($request->all());
+
+        return response()->json($todo);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -68,6 +75,6 @@ class TodoController extends Controller
     {
         $todo->delete();
 
-        return response()->json(204);
+        return response()->json(200);
     }
 }

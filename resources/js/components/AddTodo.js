@@ -1,25 +1,59 @@
-import React from 'react';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-function AddTodo()
-{
+function AddTodo() {
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+
+    async function addTodo(title, description) {
+        console.log(title);
+        const response = await axios.post("http://localhost:8000/api/todos", {
+            title: title,
+            description: description,
+        });
+
+        // setTodos([...todos, response.data]);
+    }
+
     return (
         <div className="container">
             <div className="row justify-content-center">
                 <div className="col-md-8">
                     <div className="card">
-                        <h5 class="card-header">Add Todo</h5>
-                        <div class="card-body">
+                        <h5 className="card-header">Add Todo</h5>
+                        <div className="card-body">
                             <form>
                                 <div className="form-group">
                                     <label>Title </label>
-                                    <input className="form-control" type ="text" />
+                                    <input
+                                        onChange={(e) =>
+                                            setTitle(e.target.value)
+                                        }
+                                        className="form-control"
+                                        type="text"
+                                    />
                                 </div>
                                 <div className="form-group">
                                     <label>Description </label>
-                                    <textarea className="form-control" type ="text" />
+                                    <textarea
+                                        onChange={(e) =>
+                                            setDescription(e.target.value)
+                                        }
+                                        className="form-control"
+                                        type="text"
+                                    />
                                 </div>
                                 <div className="form-group">
-                                    <button type="button" className="btn btn-success">Add</button>
+                                    <Link
+                                        to="/"
+                                        onClick={() => {
+                                            addTodo(title, description);
+                                        }}
+                                        type="button"
+                                        className="btn btn-success"
+                                    >
+                                        Add
+                                    </Link>
                                 </div>
                             </form>
                         </div>
