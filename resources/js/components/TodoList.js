@@ -2,6 +2,8 @@ import React, { Component, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ReactDOM from "react-dom";
 import axios from "axios";
+import EditTodo from "./EditTodo";
+import TodoInfo from "./TodoInfo";
 
 function TodoList() {
     const [todos, setTodos] = useState([]);
@@ -12,7 +14,20 @@ function TodoList() {
     async function getTodos() {
         const response = await axios.get("http://localhost:8000/api/todos");
         setTodos(response.data);
-        // console.log(response.data);
+    }
+
+    async function deleteTodo(id) {
+        await axios.delete("http://localhost:8000/api/todos/" + id);
+        getTodos();
+    }
+
+    async function editTodo(id, title, description) {
+        console.log(title);
+        const response = await axios.put("http://localhost:8000/api/todos", {
+            id: id,
+            title: title,
+            description: description,
+        });
     }
 
     return (
@@ -29,6 +44,7 @@ function TodoList() {
                                 <table className="table table-borderless">
                                     <thead>
                                         <tr>
+                                            <th scope="col"></th>
                                             <th scope="col">Todo</th>
                                             <th scope="col">Description</th>
                                             <th scope="col"></th>
@@ -38,11 +54,40 @@ function TodoList() {
                                     <tbody>
                                         {todos.map((todo) => {
                                             return (
-                                                <tr key={todo.title}>
-                                                    <td>{todo.title}</td>
+                                                <tr key={todo.id}>
+                                                    <td></td>
+                                                    <td
+                                                        onClick={() => {
+                                                            TodoInfo(todo);
+                                                        }}
+                                                    >
+                                                        {todo.title}
+                                                    </td>
                                                     <td>{todo.description}</td>
-                                                    <td></td>
-                                                    <td></td>
+                                                    {/* <td>{todo.completed}</td> */}
+                                                    <td>
+                                                        <Link
+                                                            to={
+                                                                "/edit-todo/" +
+                                                                todo.id
+                                                            }
+                                                            className="btn btn-secondary"
+                                                        >
+                                                            Edit
+                                                        </Link>
+                                                    </td>
+                                                    <td>
+                                                        <a
+                                                            onClick={() => {
+                                                                deleteTodo(
+                                                                    todo.id
+                                                                );
+                                                            }}
+                                                            className="btn btn-danger"
+                                                        >
+                                                            Delete
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                             );
                                         })}

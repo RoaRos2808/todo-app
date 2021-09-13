@@ -6,13 +6,11 @@ function AddTodo() {
     const [description, setDescription] = useState("");
 
     async function addTodo(title, description) {
-        console.log(title);
+        // console.log(title);
         const response = await axios.post("http://localhost:8000/api/todos", {
             title: title,
             description: description,
         });
-
-        // setTodos([...todos, response.data]);
     }
 
     return (
