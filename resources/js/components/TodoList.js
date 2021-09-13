@@ -64,7 +64,7 @@ function TodoList() {
                                                         {todo.title}
                                                     </td>
                                                     <td>{todo.description}</td>
-                                                    {/* <td>{todo.completed}</td> */}
+                                                    <td>{todo.completed}</td>
                                                     <td>
                                                         <Link
                                                             to={
@@ -74,9 +74,7 @@ function TodoList() {
                                                             className="btn btn-secondary"
                                                         >
                                                             Edit
-                                                        </Link>
-                                                    </td>
-                                                    <td>
+                                                        </Link>{" "}
                                                         <a
                                                             onClick={() => {
                                                                 deleteTodo(
