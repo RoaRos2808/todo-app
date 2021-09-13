@@ -2148,17 +2148,20 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 function EditTodo() {
-  var id = window.location.pathname.split("/").pop();
-
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(window.location.pathname.split("/").pop()),
       _useState2 = _slicedToArray(_useState, 2),
-      title = _useState2[0],
-      setTitle = _useState2[1];
+      id = _useState2[0],
+      setId = _useState2[1];
 
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
       _useState4 = _slicedToArray(_useState3, 2),
-      description = _useState4[0],
-      setDescription = _useState4[1];
+      title = _useState4[0],
+      setTitle = _useState4[1];
+
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+      _useState6 = _slicedToArray(_useState5, 2),
+      description = _useState6[0],
+      setDescription = _useState6[1];
 
   function editTodo(_x, _x2, _x3) {
     return _editTodo.apply(this, arguments);
@@ -2175,7 +2178,7 @@ function EditTodo() {
               console.log(id);
               _context.next = 3;
               return axios.put("http://localhost:8000/api/todos/" + id, {
-                id: id,
+                // id: id,
                 title: title,
                 description: description
               });
@@ -2369,9 +2372,10 @@ function TodoList() {
 
             case 2:
               response = _context.sent;
+              console.log(response.data);
               setTodos(response.data);
 
-            case 4:
+            case 5:
             case "end":
               return _context.stop();
           }
@@ -2439,6 +2443,35 @@ function TodoList() {
     return _editTodo.apply(this, arguments);
   }
 
+  function toggleTodo(_x5) {
+    return _toggleTodo.apply(this, arguments);
+  }
+
+  function _toggleTodo() {
+    _toggleTodo = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4(todo) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              console.log(todo);
+              _context4.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_3___default().put("http://localhost:8000/api/todos/" + todo.id, {
+                completed: !todo.completed
+              });
+
+            case 3:
+              getTodos();
+
+            case 4:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    }));
+    return _toggleTodo.apply(this, arguments);
+  }
+
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
     className: "container",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
@@ -2479,7 +2512,15 @@ function TodoList() {
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tbody", {
                   children: todos.map(function (todo) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
+                          type: "checkbox",
+                          checked: todo.completed,
+                          onChange: function onChange() {
+                            toggleTodo(todo);
+                          }
+                        })
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
                         onClick: function onClick() {
                           (0,_TodoInfo__WEBPACK_IMPORTED_MODULE_5__.default)(todo);
                         },
@@ -2493,13 +2534,15 @@ function TodoList() {
                           to: "/edit-todo/" + todo.id,
                           className: "btn btn-secondary",
                           children: "Edit"
-                        }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
+                        }), " "]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
                           onClick: function onClick() {
                             deleteTodo(todo.id);
                           },
                           className: "btn btn-danger",
                           children: "Delete"
-                        })]
+                        })
                       })]
                     }, todo.id);
                   })

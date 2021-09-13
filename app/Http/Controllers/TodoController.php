@@ -26,7 +26,7 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        info($request->all());
+        // info($request->all());
         $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -56,9 +56,9 @@ class TodoController extends Controller
     public function update(Request $request, Todo $todo)
     {
         $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'completed' => 'boolean'
+            'title' => 'nullable|string',
+            'description' => 'nullable|string',
+            'completed' => 'nullable|boolean'
         ]);
         $todo->update($request->all());
 

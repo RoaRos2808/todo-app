@@ -17,5 +17,4 @@ use App\Http\Controllers\TodoController;
 Route::get('/todos', [TodoController::class, 'index']);
 Route::post('/todos', [TodoController::class, 'store']);
 Route::delete('/todos/{todo}', [TodoController::class, 'delete']);
-Route::patch('/todos/{todo}', [TodoController::class, 'update']);
-Route::put('/todos/{todo}', [TodoController::class, 'completedtoggle']);
+Route::put('/todos/{todo}', [TodoController::class, 'update']);

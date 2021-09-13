@@ -13,6 +13,7 @@ function TodoList() {
 
     async function getTodos() {
         const response = await axios.get("http://localhost:8000/api/todos");
+        console.log(response.data);
         setTodos(response.data);
     }
 
@@ -28,6 +29,14 @@ function TodoList() {
             title: title,
             description: description,
         });
+    }
+
+    async function toggleTodo(todo) {
+        console.log(todo);
+        await axios.put("http://localhost:8000/api/todos/" + todo.id, {
+            completed: !todo.completed,
+        });
+        getTodos();
     }
 
     return (
@@ -55,7 +64,19 @@ function TodoList() {
                                         {todos.map((todo) => {
                                             return (
                                                 <tr key={todo.id}>
-                                                    <td></td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={
+                                                                todo.completed
+                                                            }
+                                                            onChange={() => {
+                                                                toggleTodo(
+                                                                    todo
+                                                                );
+                                                            }}
+                                                        ></input>
+                                                    </td>
                                                     <td
                                                         onClick={() => {
                                                             TodoInfo(todo);
@@ -75,6 +96,8 @@ function TodoList() {
                                                         >
                                                             Edit
                                                         </Link>{" "}
+                                                    </td>
+                                                    <td>
                                                         <a
                                                             onClick={() => {
                                                                 deleteTodo(

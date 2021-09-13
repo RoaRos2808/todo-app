@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 function EditTodo() {
-    const id = window.location.pathname.split("/").pop();
+    const [id, setId] = useState(window.location.pathname.split("/").pop());
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
 
@@ -12,7 +12,7 @@ function EditTodo() {
         const response = await axios.put(
             "http://localhost:8000/api/todos/" + id,
             {
-                id: id,
+                // id: id,
                 title: title,
                 description: description,
             }
