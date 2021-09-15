@@ -2163,6 +2163,11 @@ function EditTodo() {
       description = _useState6[0],
       setDescription = _useState6[1];
 
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+      _useState8 = _slicedToArray(_useState7, 2),
+      image = _useState8[0],
+      setImage = _useState8[1];
+
   function editTodo(_x, _x2, _x3) {
     return _editTodo.apply(this, arguments);
   }
@@ -2178,7 +2183,6 @@ function EditTodo() {
               console.log(id);
               _context.next = 3;
               return axios.put("http://localhost:8000/api/todos/" + id, {
-                // id: id,
                 title: title,
                 description: description
               });
@@ -2195,6 +2199,42 @@ function EditTodo() {
     }));
     return _editTodo.apply(this, arguments);
   }
+
+  function uploadImage(_x4, _x5) {
+    return _uploadImage.apply(this, arguments);
+  }
+
+  function _uploadImage() {
+    _uploadImage = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(id, formData) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return axios.post("http://localhost:8000/api/todos/" + id, formData);
+
+            case 2:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+    return _uploadImage.apply(this, arguments);
+  }
+
+  var selectedImageHandler = function selectedImageHandler(e) {
+    if (e.target.files.length) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  var uploadClick = function uploadClick(e) {
+    e.preventDefault();
+    var formData = new FormData();
+    formData.append("image", image);
+    uploadImage(id, formData);
+  };
 
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
@@ -2230,6 +2270,29 @@ function EditTodo() {
                     className: "form-control",
                     type: "text"
                   })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("table", {
+                    className: "table table-borderless",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("tbody", {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                            className: "btn btn-secondary",
+                            type: "file",
+                            onChange: selectedImageHandler
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                            className: "btn btn-primary",
+                            onClick: function onClick(e) {
+                              uploadClick(e);
+                            },
+                            children: "Upload Image"
+                          })
+                        })]
+                      })
+                    })
+                  })
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                   className: "form-group",
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Link, {
@@ -2507,6 +2570,8 @@ function TodoList() {
                       scope: "col"
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
                       scope: "col"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
+                      scope: "col"
                     })]
                   })
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tbody", {
@@ -2529,12 +2594,20 @@ function TodoList() {
                         children: todo.description
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
                         children: todo.completed
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("td", {
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Link, {
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+                          className: "image",
+                          src: "/storage/" + todo.id + ".jpg",
+                          onError: function onError(e) {
+                            return e.target.src = "";
+                          }
+                        })
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Link, {
                           to: "/edit-todo/" + todo.id,
                           className: "btn btn-secondary",
                           children: "Edit"
-                        }), " "]
+                        })
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
                         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
                           onClick: function onClick() {

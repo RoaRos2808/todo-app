@@ -58,6 +58,7 @@ function TodoList() {
                                             <th scope="col">Description</th>
                                             <th scope="col"></th>
                                             <th scope="col"></th>
+                                            <th scope="col"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -87,6 +88,20 @@ function TodoList() {
                                                     <td>{todo.description}</td>
                                                     <td>{todo.completed}</td>
                                                     <td>
+                                                        <img
+                                                            className="image"
+                                                            src={
+                                                                "/storage/" +
+                                                                todo.id +
+                                                                ".jpg"
+                                                            }
+                                                            onError={(e) =>
+                                                                (e.target.src =
+                                                                    "")
+                                                            }
+                                                        ></img>
+                                                    </td>
+                                                    <td>
                                                         <Link
                                                             to={
                                                                 "/edit-todo/" +
@@ -95,7 +110,7 @@ function TodoList() {
                                                             className="btn btn-secondary"
                                                         >
                                                             Edit
-                                                        </Link>{" "}
+                                                        </Link>
                                                     </td>
                                                     <td>
                                                         <a

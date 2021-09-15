@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Todo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class TodoController extends Controller
 {
@@ -30,7 +31,6 @@ class TodoController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            // 'completed' => 'boolean'
         ]);
         $todo = Todo::create($request->all());
 
@@ -76,5 +76,23 @@ class TodoController extends Controller
         $todo->delete();
 
         return response()->json(200);
+    }
+
+    public function uploadImage(Request $request, $todo)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'image' => 'nullable'
+            ]
+        );
+        if ($validator->fails()) {
+            return response($validator->getMessageBag(), 400);
+        }
+
+        $extension = '.' . $request->file('image')->getClientOriginalExtension();
+        $request->file('image')->storeAs('public/', 'hello.png');
+
+        return response(201);
     }
 }
