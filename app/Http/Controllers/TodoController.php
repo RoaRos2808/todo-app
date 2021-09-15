@@ -6,6 +6,7 @@ use App\Models\Todo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\File;
 
 class TodoController extends Controller
 {
@@ -27,10 +28,9 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        // info($request->all());
         $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+            'title' => 'required|max:20',
+            'description' => 'required|max:30',
         ]);
         $todo = Todo::create($request->all());
 
@@ -53,11 +53,16 @@ class TodoController extends Controller
         return response()->json(200);
     }
 
+    public function show(Request $request, Todo $todo)
+    {
+        return response()->json($todo);
+    }
+
     public function update(Request $request, Todo $todo)
     {
         $request->validate([
-            'title' => 'nullable|string',
-            'description' => 'nullable|string',
+            'title' => 'nullable|string|max:20',
+            'description' => 'nullable|string|max:30',
             'completed' => 'nullable|boolean'
         ]);
         $todo->update($request->all());
@@ -78,20 +83,13 @@ class TodoController extends Controller
         return response()->json(200);
     }
 
-    public function uploadImage(Request $request, $todo)
+    public function uploadImage(Request $request, Todo $todo)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'image' => 'nullable'
-            ]
-        );
-        if ($validator->fails()) {
-            return response($validator->getMessageBag(), 400);
-        }
+        $request->validate(['image'=>'required']);
 
         $extension = '.' . $request->file('image')->getClientOriginalExtension();
-        $request->file('image')->storeAs('public/', 'hello.png');
+        $todo->update(['image_path' => $todo->id . $extension]);
+        Storage::disk('public')->put($todo->id . $extension, file_get_contents($request->file('image')));
 
         return response(201);
     }

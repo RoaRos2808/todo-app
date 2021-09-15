@@ -12,7 +12,8 @@ class Todo extends Model
     protected $fillable = [
         'title',
         'description',
-        'completed'
+        'completed',
+        'image_path'
     ];
     
     protected $casts = [

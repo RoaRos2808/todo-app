@@ -1,15 +1,30 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function EditTodo() {
     const [id, setId] = useState(window.location.pathname.split("/").pop());
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [image, setImage] = useState("");
+    const [todo, setTodo] = useState();
+
+    useEffect(() => {
+        getTodo();
+    }, []);
+
+    async function getTodo() {
+        const response = await axios.get(
+            "http://localhost:8000/api/todos/" + id
+        );
+        setTodo(response.data);
+        setTitle(response.data.title);
+        setDescription(response.data.description);
+    }
 
     async function editTodo(id, title, description) {
-        // console.log(title);
-        console.log(id);
         const response = await axios.put(
             "http://localhost:8000/api/todos/" + id,
             {
@@ -20,7 +35,10 @@ function EditTodo() {
     }
 
     async function uploadImage(id, formData) {
-        await axios.post("http://localhost:8000/api/todos/" + id, formData);
+        await axios
+            .post("http://localhost:8000/api/todos/" + id, formData)
+            .then(() => toast("Image uploaded"))
+            .catch(() => toast("Image upload failed!"));
     }
 
     const selectedImageHandler = (e) => {
@@ -51,6 +69,7 @@ function EditTodo() {
                                                 setTitle(e.target.value)
                                             }
                                             className="form-control"
+                                            value={title}
                                             type="text"
                                         />
                                     </div>
@@ -61,6 +80,7 @@ function EditTodo() {
                                                 setDescription(e.target.value)
                                             }
                                             className="form-control"
+                                            value={description}
                                             type="text"
                                         />
                                     </div>
@@ -72,9 +92,11 @@ function EditTodo() {
                                                         <input
                                                             className="btn btn-secondary"
                                                             type="file"
-                                                            onChange={
-                                                                selectedImageHandler
-                                                            }
+                                                            onChange={(e) => {
+                                                                selectedImageHandler(
+                                                                    e
+                                                                );
+                                                            }}
                                                         ></input>
                                                     </td>
                                                     <td>
@@ -113,6 +135,7 @@ function EditTodo() {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 }

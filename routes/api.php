@@ -19,3 +19,4 @@ Route::post('/todos', [TodoController::class, 'store']);
 Route::delete('/todos/{todo}', [TodoController::class, 'delete']);
 Route::put('/todos/{todo}', [TodoController::class, 'update']);
 Route::post('/todos/{todo}', [TodoController::class, 'uploadImage']);
+Route::get('/todos/{todo}', [TodoController::class, 'show']);

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import ReactDOM from "react-dom";
 import axios from "axios";
 import EditTodo from "./EditTodo";
-import TodoInfo from "./TodoInfo";
 
 function TodoList() {
     const [todos, setTodos] = useState([]);
@@ -13,7 +12,6 @@ function TodoList() {
 
     async function getTodos() {
         const response = await axios.get("http://localhost:8000/api/todos");
-        console.log(response.data);
         setTodos(response.data);
     }
 
@@ -22,17 +20,7 @@ function TodoList() {
         getTodos();
     }
 
-    async function editTodo(id, title, description) {
-        console.log(title);
-        const response = await axios.put("http://localhost:8000/api/todos", {
-            id: id,
-            title: title,
-            description: description,
-        });
-    }
-
     async function toggleTodo(todo) {
-        console.log(todo);
         await axios.put("http://localhost:8000/api/todos/" + todo.id, {
             completed: !todo.completed,
         });
@@ -78,28 +66,25 @@ function TodoList() {
                                                             }}
                                                         ></input>
                                                     </td>
-                                                    <td
-                                                        onClick={() => {
-                                                            TodoInfo(todo);
-                                                        }}
-                                                    >
-                                                        {todo.title}
-                                                    </td>
+                                                    <td>{todo.title}</td>
                                                     <td>{todo.description}</td>
                                                     <td>{todo.completed}</td>
                                                     <td>
-                                                        <img
-                                                            className="image"
-                                                            src={
-                                                                "/storage/" +
-                                                                todo.id +
-                                                                ".jpg"
-                                                            }
-                                                            onError={(e) =>
-                                                                (e.target.src =
-                                                                    "")
-                                                            }
-                                                        ></img>
+                                                        {todo.image_path && (
+                                                            <img
+                                                                width="100"
+                                                                height="100"
+                                                                className="image"
+                                                                src={
+                                                                    "/storage/" +
+                                                                    todo.image_path
+                                                                }
+                                                                onError={(e) =>
+                                                                    (e.target.src =
+                                                                        "")
+                                                                }
+                                                            ></img>
+                                                        )}
                                                     </td>
                                                     <td>
                                                         <Link
